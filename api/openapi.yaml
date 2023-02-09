@@ -1,0 +1,355 @@
+openapi: 3.0.3
+info:
+  title: Pokedex ISMAI
+  description: A pokemon pokedex with some modifications
+  contact:
+    name: id043243
+    email: A043243@umaia.pt
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: My localhost
+  variables:
+    basePath:
+      default: /
+paths:
+  /pokemons/{id}:
+    get:
+      tags:
+      - PokemonData
+      summary: Finds pokemon info by Id
+      operationId: GetInfoID
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+        examples:
+          one:
+            summary: Retrieve pokemon id 1
+            value: 1
+          two:
+            summary: Retrieve pokemon id 2
+            value: 2
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pokemons'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: PokemonData
+    put:
+      tags:
+      - PokemonData
+      summary: Update status
+      operationId: updateStatus
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          minimum: 0
+          type: integer
+          format: int64
+        examples:
+          one:
+            summary: Retrieve pokemon id 1
+            value: 1
+          two:
+            summary: Retrieve pokemon id 2
+            value: 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pokemons'
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pokemons'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: PokemonData
+    delete:
+      tags:
+      - PokemonData
+      summary: Delete pokemon entry
+      operationId: deletePokemonEntry
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          minimum: 1
+          type: integer
+          format: int64
+        examples:
+          one:
+            summary: Delete pokemon id 1
+            value: 1
+          two:
+            summary: Delete pokemon id 2
+            value: 2
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: id not found
+      x-swagger-router-controller: PokemonData
+  /pokemons/{name}:
+    get:
+      tags:
+      - PokemonData
+      summary: Finds pokemon info by name
+      operationId: GetInfoName
+      parameters:
+      - name: name
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pokemons'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: PokemonData
+  /pokemons/regions:
+    get:
+      tags:
+      - PokemonData
+      summary: Finds pokemons by Region
+      operationId: pokemonRegion
+      parameters:
+      - name: name
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Region'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: PokemonData
+  /Region:
+    get:
+      tags:
+      - Region
+      summary: Says cardinal point
+      operationId: cardinalpoint
+      parameters:
+      - name: name
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Region'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: Region
+  /pokemons:
+    get:
+      tags:
+      - PokemonData
+      summary: Finds pokemons
+      operationId: findspokedata
+      responses:
+        "200":
+          description: Array of pokemons model instances
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/pokemons'
+                x-content-type: application/json
+            application/xml:
+              schema:
+                type: array
+                xml:
+                  name: pokemon
+                items:
+                  $ref: '#/components/schemas/pokemons'
+      x-swagger-router-controller: PokemonData
+    post:
+      tags:
+      - PokemonData
+      summary: Create pokemon entry
+      operationId: createPokemon
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/pokemons'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/pokemons'
+      responses:
+        "200":
+          description: Create a pokemon model instances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/pokemons'
+      x-swagger-router-controller: PokemonData
+  /berries/{name}:
+    get:
+      tags:
+      - BerriesData
+      summary: Finds berries info by name
+      operationId: berriesName
+      parameters:
+      - name: name
+        in: path
+        required: true
+        style: simple
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/berries'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: BerriesData
+  /bag/berries:
+    get:
+      tags:
+      - Bag
+      summary: Finds berries in bag
+      operationId: berriesbag
+      parameters:
+      - name: name
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/berries'
+        "400":
+          description: Bad request
+        "404":
+          description: id not found
+      x-swagger-router-controller: Bag
+components:
+  schemas:
+    pokemons:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        estado:
+          type: string
+        region_id:
+          type: string
+      example:
+        id: 0
+        name: Bulbasaur
+        estado: Happy
+        region_id: Kanto
+      xml:
+        name: pokemon
+    Region:
+      type: object
+      properties:
+        name:
+          type: integer
+          format: int64
+        cardinal_point:
+          type: string
+      example:
+        name: Shinnoh
+        cardinal_point: North
+      xml:
+        name: Region
+    bag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        bagid:
+          type: integer
+          format: int64
+        berry:
+          type: string
+      xml:
+        name: Bag
+    berries:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name_id:
+          type: string
+        ability:
+          type: string
+      example:
+        name: name
+        ability: ability
+      xml:
+        name: berries
